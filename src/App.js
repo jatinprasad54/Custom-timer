@@ -1,23 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import {useState, useRef, useCallback,useEffect} from 'react';
 
 function App() {
+  const [timer,setTimer] = useState(5);
+  let timerRef = useRef(0);
+  const startTimer = useCallback(() => {
+   timerRef.current = setInterval(() => {
+    setTimer((state) => state-1);
+   },[1000]);
+  },[setTimer]);
+
+  const stopTimer = useCallback(() => {
+   clearInterval(timerRef.current);
+   setTimer(5);
+  },[setTimer]);
+  
+
+  useEffect(() => {
+    if(timer<1){
+     return stopTimer;
+    }
+  },[timer]);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <h1>{timer}</h1>
+    <button onClick={startTimer}>Start Timer</button>
+    <button onClick={stopTimer}>Stop Timer</button>
     </div>
   );
 }
